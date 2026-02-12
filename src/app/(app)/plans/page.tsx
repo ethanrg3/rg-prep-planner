@@ -113,7 +113,13 @@ export default function PlansPage() {
           <Card>
             <CardContent className="py-12 text-center">
               <FileText className="mx-auto mb-4 h-12 w-12 text-muted-foreground/40" />
-              <p className="text-muted-foreground">No plans to display</p>
+              <p className="text-muted-foreground">
+                {filter === "draft"
+                  ? "No plans pending review"
+                  : filter === "approved"
+                    ? "No approved plans yet"
+                    : "No plans generated yet. Create a student and generate their first plan."}
+              </p>
             </CardContent>
           </Card>
         ) : (

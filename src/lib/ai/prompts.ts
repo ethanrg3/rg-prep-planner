@@ -1,4 +1,4 @@
-import type { SATSectionScores, ACTSectionScores } from "@/types/database";
+import type { SATSectionScores, ACTSectionScores, HistoricalOutcome } from "@/types/database";
 
 interface RoadmapPromptParams {
   testType: "SAT" | "ACT";
@@ -103,4 +103,100 @@ Self-study assignments should total approximately ${selfStudyHoursPerWeek * 60} 
   }
 
   return prompt;
+}
+
+// --- Score Prediction Prompts ---
+
+interface PredictionPromptParams {
+  testType: "SAT" | "ACT";
+  baselineComposite: number;
+  sectionScores: SATSectionScores | ACTSectionScores;
+  totalWeeks: number;
+  selfStudyHoursPerWeek: number;
+  liveSessionHoursPerWeek: number;
+  totalSessions: number;
+  historicalOutcomes: HistoricalOutcome[];
+}
+
+export function buildPredictionSystemPrompt(): string {
+  return `You are an expert standardized test score prediction analyst. You analyze student baseline scores, study plan parameters, and historical outcome data to predict realistic score improvements.
+
+Your predictions should:
+- Be conservative and realistic based on the historical data provided
+- Provide a low and high prediction for the composite and each section
+- Account for the student's specific weaknesses and the study plan intensity
+- Consider diminishing returns at higher score ranges
+- Include confidence notes explaining your rationale and key factors
+
+Always use the predict_score tool to return your prediction in structured format.`;
+}
+
+export function buildPredictionUserPrompt(params: PredictionPromptParams): string {
+  const {
+    testType,
+    baselineComposite,
+    sectionScores,
+    totalWeeks,
+    selfStudyHoursPerWeek,
+    liveSessionHoursPerWeek,
+    totalSessions,
+    historicalOutcomes,
+  } = params;
+
+  let scoreBreakdown: string;
+  if (testType === "SAT") {
+    const sat = sectionScores as SATSectionScores;
+    scoreBreakdown = `
+Reading & Writing: ${sat.reading_writing.total}/800
+  - Information & Ideas: ${sat.reading_writing.information_and_ideas}/15
+  - Craft & Structure: ${sat.reading_writing.craft_and_structure}/15
+  - Expression of Ideas: ${sat.reading_writing.expression_of_ideas}/15
+  - Standard English Conventions: ${sat.reading_writing.standard_english_conventions}/15
+Math: ${sat.math.total}/800
+  - Algebra: ${sat.math.algebra}/15
+  - Advanced Math: ${sat.math.advanced_math}/15
+  - Problem Solving & Data Analysis: ${sat.math.problem_solving}/15
+  - Geometry & Trigonometry: ${sat.math.geometry_and_trig}/15`;
+  } else {
+    const act = sectionScores as ACTSectionScores;
+    scoreBreakdown = `
+English: ${act.english.total}/36
+  - Usage & Mechanics: ${act.english.usage_mechanics}/18
+  - Rhetorical Skills: ${act.english.rhetorical_skills}/18
+Math: ${act.math.total}/36
+  - Pre-Algebra / Elementary Algebra: ${act.math.pre_algebra}/18
+  - Algebra / Coordinate Geometry: ${act.math.algebra}/18
+  - Plane Geometry / Trigonometry: ${act.math.geometry}/18
+Reading: ${act.reading.total}/36
+  - Social Studies / Sciences: ${act.reading.social_studies_sciences}/18
+  - Arts / Literature: ${act.reading.arts_literature}/18
+Science: ${act.science.total}/36
+  - Data Representation: ${act.science.data_representation}/18
+  - Research Summaries: ${act.science.research_summaries}/18
+  - Conflicting Viewpoints: ${act.science.conflicting_viewpoints}/18`;
+  }
+
+  // Build historical outcomes table
+  let historicalTable = "| Baseline | Final | Improvement | Weeks | Study hrs/wk | Live hrs/wk |\n";
+  historicalTable += "|----------|-------|-------------|-------|-------------|-------------|\n";
+  for (const h of historicalOutcomes) {
+    historicalTable += `| ${h.baseline_composite} | ${h.final_composite} | +${h.final_composite - h.baseline_composite} | ${h.total_weeks} | ${h.self_study_hours_per_week ?? "N/A"} | ${h.live_session_hours_per_week ?? "N/A"} |\n`;
+  }
+
+  return `Predict the score improvement for this ${testType} student.
+
+STUDENT BASELINE:
+- Composite: ${baselineComposite}
+${scoreBreakdown}
+
+STUDY PLAN:
+- Duration: ${totalWeeks} weeks
+- Self-study: ${selfStudyHoursPerWeek} hours/week
+- Live tutoring: ${liveSessionHoursPerWeek} hours/week
+- Total sessions: ${totalSessions}
+
+HISTORICAL OUTCOMES (similar students):
+${historicalTable}
+
+Based on this data, predict the student's composite score range and per-section score ranges. For SAT, provide predictions for "reading_writing" and "math" sections. For ACT, provide predictions for "english", "math", "reading", and "science" sections.`;
 }

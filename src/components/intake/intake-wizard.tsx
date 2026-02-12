@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Check, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { StepBasicInfo } from "./step-basic-info";
 import { StepTestDetails } from "./step-test-details";
@@ -196,9 +197,11 @@ export function IntakeWizard() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Redirect to students list (or to plan generation if generatePlan is true)
+      toast.success("Student created successfully");
       router.push("/students");
     } catch (error) {
       console.error("Failed to create student:", error);
+      toast.error("Failed to create student. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

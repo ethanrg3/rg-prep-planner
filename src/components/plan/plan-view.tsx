@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { PlanTimeline, type PlanWeekData } from "./plan-timeline";
 import { PlanApprovalBar } from "./plan-approval-bar";
+import { toast } from "sonner";
 
 interface PlanViewProps {
   studentName: string;
@@ -30,15 +31,17 @@ export function PlanView({
     setTimeout(() => {
       setStatus("approved");
       setIsLoading(false);
+      toast.success("Plan approved successfully");
     }, 800);
   }
 
   function handleRegenerate(notes: string) {
     setIsLoading(true);
-    // TODO: Call API to regenerate plan with notes
+    toast("Regenerating plan...");
     console.log("Regenerating plan with notes:", notes);
     setTimeout(() => {
       setIsLoading(false);
+      toast.success("Plan regenerated successfully");
     }, 2000);
   }
 

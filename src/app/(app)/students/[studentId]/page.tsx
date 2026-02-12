@@ -23,6 +23,7 @@ import {
 } from "@/lib/utils/constants";
 import { PlanView } from "@/components/plan/plan-view";
 import type { PlanWeekData } from "@/components/plan/plan-timeline";
+import { ScorePredictionPanel } from "@/components/scores/score-prediction-panel";
 
 // TODO: Replace with Supabase fetch by studentId
 const mockStudent = {
@@ -288,12 +289,14 @@ export default function StudentDetailPage() {
 
       {/* Tabs */}
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="plan">Plan</TabsTrigger>
-          <TabsTrigger value="scores">Scores</TabsTrigger>
-          <TabsTrigger value="sessions">Sessions</TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto">
+          <TabsList>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="plan">Plan</TabsTrigger>
+            <TabsTrigger value="scores">Scores</TabsTrigger>
+            <TabsTrigger value="sessions">Sessions</TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* Overview Tab */}
         <TabsContent value="overview">
@@ -436,7 +439,8 @@ export default function StudentDetailPage() {
 
         {/* Scores Tab */}
         <TabsContent value="scores">
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="space-y-6">
+            {/* Baseline Scores Card */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">Baseline Scores</CardTitle>
@@ -526,27 +530,20 @@ export default function StudentDetailPage() {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Predicted Scores</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-green-600">
-                    {s.predictedLow} — {s.predictedHigh}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Predicted Range
-                  </p>
-                </div>
-                <div className="pt-2 text-center">
-                  <p className="text-sm text-muted-foreground">
-                    Score prediction charts will be displayed here once Phase
-                    5 is built.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Score Prediction Panel */}
+            <ScorePredictionPanel
+              studentId={s.id}
+              testType={s.testType}
+              baselineComposite={s.baselineComposite}
+              baselineSubscores={{
+                ...s.baselineRWSubscores,
+                ...s.baselineMathSubscores,
+              }}
+              totalWeeks={8}
+              selfStudyHoursPerWeek={s.selfStudyHoursPerWeek}
+              liveSessionHoursPerWeek={s.liveSessionHoursPerWeek}
+              totalSessions={s.sessionsPaid}
+            />
           </div>
         </TabsContent>
 

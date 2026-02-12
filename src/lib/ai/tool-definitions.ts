@@ -1,5 +1,58 @@
 import type { Tool } from "@anthropic-ai/sdk/resources/messages";
 
+export const predictScoreTool: Tool = {
+  name: "predict_score",
+  description:
+    "Predict score ranges for a student based on baseline scores, study plan parameters, and historical outcome data.",
+  input_schema: {
+    type: "object" as const,
+    properties: {
+      predicted_composite_low: {
+        type: "number",
+        description: "Lower bound of predicted composite score",
+      },
+      predicted_composite_high: {
+        type: "number",
+        description: "Upper bound of predicted composite score",
+      },
+      section_predictions: {
+        type: "object",
+        description:
+          "Per-section predictions. Keys are section names (e.g., 'reading_writing', 'math' for SAT; 'english', 'math', 'reading', 'science' for ACT)",
+        additionalProperties: {
+          type: "object",
+          properties: {
+            current: {
+              type: "number",
+              description: "Current baseline score for this section",
+            },
+            predicted_low: {
+              type: "number",
+              description: "Lower bound of predicted section score",
+            },
+            predicted_high: {
+              type: "number",
+              description: "Upper bound of predicted section score",
+            },
+          },
+          required: ["current", "predicted_low", "predicted_high"],
+        },
+      },
+      confidence_notes: {
+        type: "string",
+        description:
+          "Detailed explanation of prediction confidence, key factors, and comparison to historical outcomes",
+      },
+    },
+    required: [
+      "predicted_composite_low",
+      "predicted_composite_high",
+      "section_predictions",
+      "confidence_notes",
+    ],
+  },
+};
+
 export const generatePrepPlanTool: Tool = {
   name: "generate_prep_plan",
   description:

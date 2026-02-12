@@ -1,0 +1,180 @@
+import type { HistoricalOutcome, SATSectionScores, ACTSectionScores } from "@/types/database";
+
+export const HISTORICAL_OUTCOMES_SEED: HistoricalOutcome[] = [
+  // SAT records (18)
+  {
+    id: "hist_001", test_type: "SAT", baseline_composite: 880, final_composite: 1060,
+    baseline_section_scores: { reading_writing: { total: 440, information_and_ideas: 8, craft_and_structure: 7, expression_of_ideas: 6, standard_english_conventions: 7 }, math: { total: 440, algebra: 7, advanced_math: 5, problem_solving: 6, geometry_and_trig: 5 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 530, information_and_ideas: 11, craft_and_structure: 10, expression_of_ideas: 9, standard_english_conventions: 10 }, math: { total: 530, algebra: 10, advanced_math: 8, problem_solving: 9, geometry_and_trig: 8 } } as SATSectionScores,
+    total_weeks: 12, self_study_hours_per_week: 6, live_session_hours_per_week: 2, total_sessions: 24, created_at: "2025-06-01T00:00:00Z",
+  },
+  {
+    id: "hist_002", test_type: "SAT", baseline_composite: 950, final_composite: 1130,
+    baseline_section_scores: { reading_writing: { total: 480, information_and_ideas: 9, craft_and_structure: 8, expression_of_ideas: 7, standard_english_conventions: 8 }, math: { total: 470, algebra: 8, advanced_math: 6, problem_solving: 7, geometry_and_trig: 6 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 570, information_and_ideas: 12, craft_and_structure: 11, expression_of_ideas: 10, standard_english_conventions: 11 }, math: { total: 560, algebra: 11, advanced_math: 9, problem_solving: 10, geometry_and_trig: 9 } } as SATSectionScores,
+    total_weeks: 10, self_study_hours_per_week: 5, live_session_hours_per_week: 2, total_sessions: 20, created_at: "2025-05-15T00:00:00Z",
+  },
+  {
+    id: "hist_003", test_type: "SAT", baseline_composite: 1020, final_composite: 1180,
+    baseline_section_scores: { reading_writing: { total: 520, information_and_ideas: 10, craft_and_structure: 9, expression_of_ideas: 8, standard_english_conventions: 9 }, math: { total: 500, algebra: 9, advanced_math: 7, problem_solving: 8, geometry_and_trig: 7 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 600, information_and_ideas: 13, craft_and_structure: 12, expression_of_ideas: 11, standard_english_conventions: 12 }, math: { total: 580, algebra: 12, advanced_math: 10, problem_solving: 11, geometry_and_trig: 10 } } as SATSectionScores,
+    total_weeks: 8, self_study_hours_per_week: 5, live_session_hours_per_week: 2, total_sessions: 16, created_at: "2025-04-20T00:00:00Z",
+  },
+  {
+    id: "hist_004", test_type: "SAT", baseline_composite: 1080, final_composite: 1250,
+    baseline_section_scores: { reading_writing: { total: 550, information_and_ideas: 11, craft_and_structure: 10, expression_of_ideas: 9, standard_english_conventions: 10 }, math: { total: 530, algebra: 10, advanced_math: 8, problem_solving: 9, geometry_and_trig: 8 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 640, information_and_ideas: 14, craft_and_structure: 13, expression_of_ideas: 12, standard_english_conventions: 13 }, math: { total: 610, algebra: 13, advanced_math: 11, problem_solving: 12, geometry_and_trig: 11 } } as SATSectionScores,
+    total_weeks: 10, self_study_hours_per_week: 6, live_session_hours_per_week: 3, total_sessions: 20, created_at: "2025-03-10T00:00:00Z",
+  },
+  {
+    id: "hist_005", test_type: "SAT", baseline_composite: 1100, final_composite: 1240,
+    baseline_section_scores: { reading_writing: { total: 560, information_and_ideas: 12, craft_and_structure: 10, expression_of_ideas: 9, standard_english_conventions: 10 }, math: { total: 540, algebra: 10, advanced_math: 9, problem_solving: 9, geometry_and_trig: 8 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 640, information_and_ideas: 14, craft_and_structure: 13, expression_of_ideas: 12, standard_english_conventions: 12 }, math: { total: 600, algebra: 13, advanced_math: 11, problem_solving: 11, geometry_and_trig: 10 } } as SATSectionScores,
+    total_weeks: 8, self_study_hours_per_week: 4, live_session_hours_per_week: 2, total_sessions: 16, created_at: "2025-07-05T00:00:00Z",
+  },
+  {
+    id: "hist_006", test_type: "SAT", baseline_composite: 1120, final_composite: 1290,
+    baseline_section_scores: { reading_writing: { total: 580, information_and_ideas: 12, craft_and_structure: 11, expression_of_ideas: 10, standard_english_conventions: 11 }, math: { total: 540, algebra: 10, advanced_math: 8, problem_solving: 9, geometry_and_trig: 8 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 660, information_and_ideas: 14, craft_and_structure: 14, expression_of_ideas: 13, standard_english_conventions: 13 }, math: { total: 630, algebra: 13, advanced_math: 12, problem_solving: 12, geometry_and_trig: 11 } } as SATSectionScores,
+    total_weeks: 10, self_study_hours_per_week: 5, live_session_hours_per_week: 2, total_sessions: 20, created_at: "2025-08-12T00:00:00Z",
+  },
+  {
+    id: "hist_007", test_type: "SAT", baseline_composite: 1150, final_composite: 1310,
+    baseline_section_scores: { reading_writing: { total: 590, information_and_ideas: 13, craft_and_structure: 11, expression_of_ideas: 10, standard_english_conventions: 11 }, math: { total: 560, algebra: 11, advanced_math: 9, problem_solving: 10, geometry_and_trig: 9 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 670, information_and_ideas: 15, craft_and_structure: 14, expression_of_ideas: 13, standard_english_conventions: 13 }, math: { total: 640, algebra: 14, advanced_math: 12, problem_solving: 12, geometry_and_trig: 11 } } as SATSectionScores,
+    total_weeks: 8, self_study_hours_per_week: 6, live_session_hours_per_week: 2, total_sessions: 16, created_at: "2025-09-01T00:00:00Z",
+  },
+  {
+    id: "hist_008", test_type: "SAT", baseline_composite: 1050, final_composite: 1200,
+    baseline_section_scores: { reading_writing: { total: 530, information_and_ideas: 10, craft_and_structure: 9, expression_of_ideas: 8, standard_english_conventions: 9 }, math: { total: 520, algebra: 9, advanced_math: 8, problem_solving: 8, geometry_and_trig: 7 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 610, information_and_ideas: 13, craft_and_structure: 12, expression_of_ideas: 11, standard_english_conventions: 12 }, math: { total: 590, algebra: 12, advanced_math: 11, problem_solving: 11, geometry_and_trig: 10 } } as SATSectionScores,
+    total_weeks: 10, self_study_hours_per_week: 5, live_session_hours_per_week: 2, total_sessions: 20, created_at: "2025-10-15T00:00:00Z",
+  },
+  {
+    id: "hist_009", test_type: "SAT", baseline_composite: 1200, final_composite: 1380,
+    baseline_section_scores: { reading_writing: { total: 610, information_and_ideas: 13, craft_and_structure: 12, expression_of_ideas: 11, standard_english_conventions: 12 }, math: { total: 590, algebra: 12, advanced_math: 10, problem_solving: 11, geometry_and_trig: 10 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 700, information_and_ideas: 15, craft_and_structure: 15, expression_of_ideas: 14, standard_english_conventions: 14 }, math: { total: 680, algebra: 14, advanced_math: 13, problem_solving: 13, geometry_and_trig: 13 } } as SATSectionScores,
+    total_weeks: 12, self_study_hours_per_week: 7, live_session_hours_per_week: 3, total_sessions: 24, created_at: "2025-02-20T00:00:00Z",
+  },
+  {
+    id: "hist_010", test_type: "SAT", baseline_composite: 990, final_composite: 1120,
+    baseline_section_scores: { reading_writing: { total: 500, information_and_ideas: 9, craft_and_structure: 8, expression_of_ideas: 8, standard_english_conventions: 8 }, math: { total: 490, algebra: 9, advanced_math: 7, problem_solving: 7, geometry_and_trig: 7 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 570, information_and_ideas: 12, craft_and_structure: 11, expression_of_ideas: 10, standard_english_conventions: 10 }, math: { total: 550, algebra: 11, advanced_math: 9, problem_solving: 10, geometry_and_trig: 9 } } as SATSectionScores,
+    total_weeks: 6, self_study_hours_per_week: 4, live_session_hours_per_week: 2, total_sessions: 12, created_at: "2025-11-01T00:00:00Z",
+  },
+  {
+    id: "hist_011", test_type: "SAT", baseline_composite: 1300, final_composite: 1440,
+    baseline_section_scores: { reading_writing: { total: 660, information_and_ideas: 14, craft_and_structure: 13, expression_of_ideas: 12, standard_english_conventions: 13 }, math: { total: 640, algebra: 13, advanced_math: 12, problem_solving: 12, geometry_and_trig: 11 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 730, information_and_ideas: 15, craft_and_structure: 15, expression_of_ideas: 14, standard_english_conventions: 14 }, math: { total: 710, algebra: 15, advanced_math: 14, problem_solving: 14, geometry_and_trig: 13 } } as SATSectionScores,
+    total_weeks: 8, self_study_hours_per_week: 8, live_session_hours_per_week: 3, total_sessions: 16, created_at: "2025-01-10T00:00:00Z",
+  },
+  {
+    id: "hist_012", test_type: "SAT", baseline_composite: 850, final_composite: 1010,
+    baseline_section_scores: { reading_writing: { total: 430, information_and_ideas: 7, craft_and_structure: 6, expression_of_ideas: 6, standard_english_conventions: 6 }, math: { total: 420, algebra: 6, advanced_math: 5, problem_solving: 5, geometry_and_trig: 5 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 510, information_and_ideas: 10, craft_and_structure: 9, expression_of_ideas: 9, standard_english_conventions: 8 }, math: { total: 500, algebra: 9, advanced_math: 8, problem_solving: 8, geometry_and_trig: 7 } } as SATSectionScores,
+    total_weeks: 14, self_study_hours_per_week: 6, live_session_hours_per_week: 2, total_sessions: 28, created_at: "2025-04-01T00:00:00Z",
+  },
+  {
+    id: "hist_013", test_type: "SAT", baseline_composite: 1160, final_composite: 1280,
+    baseline_section_scores: { reading_writing: { total: 600, information_and_ideas: 13, craft_and_structure: 11, expression_of_ideas: 10, standard_english_conventions: 11 }, math: { total: 560, algebra: 11, advanced_math: 9, problem_solving: 9, geometry_and_trig: 8 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 660, information_and_ideas: 14, craft_and_structure: 13, expression_of_ideas: 12, standard_english_conventions: 13 }, math: { total: 620, algebra: 13, advanced_math: 11, problem_solving: 11, geometry_and_trig: 10 } } as SATSectionScores,
+    total_weeks: 6, self_study_hours_per_week: 5, live_session_hours_per_week: 2, total_sessions: 12, created_at: "2025-06-20T00:00:00Z",
+  },
+  {
+    id: "hist_014", test_type: "SAT", baseline_composite: 1040, final_composite: 1230,
+    baseline_section_scores: { reading_writing: { total: 520, information_and_ideas: 10, craft_and_structure: 9, expression_of_ideas: 8, standard_english_conventions: 9 }, math: { total: 520, algebra: 10, advanced_math: 8, problem_solving: 8, geometry_and_trig: 7 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 620, information_and_ideas: 13, craft_and_structure: 12, expression_of_ideas: 12, standard_english_conventions: 12 }, math: { total: 610, algebra: 13, advanced_math: 11, problem_solving: 11, geometry_and_trig: 10 } } as SATSectionScores,
+    total_weeks: 12, self_study_hours_per_week: 7, live_session_hours_per_week: 3, total_sessions: 24, created_at: "2025-08-01T00:00:00Z",
+  },
+  {
+    id: "hist_015", test_type: "SAT", baseline_composite: 1350, final_composite: 1480,
+    baseline_section_scores: { reading_writing: { total: 680, information_and_ideas: 14, craft_and_structure: 14, expression_of_ideas: 13, standard_english_conventions: 13 }, math: { total: 670, algebra: 14, advanced_math: 12, problem_solving: 13, geometry_and_trig: 12 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 750, information_and_ideas: 15, craft_and_structure: 15, expression_of_ideas: 15, standard_english_conventions: 15 }, math: { total: 730, algebra: 15, advanced_math: 14, problem_solving: 14, geometry_and_trig: 14 } } as SATSectionScores,
+    total_weeks: 8, self_study_hours_per_week: 10, live_session_hours_per_week: 4, total_sessions: 16, created_at: "2025-09-15T00:00:00Z",
+  },
+  {
+    id: "hist_016", test_type: "SAT", baseline_composite: 920, final_composite: 1080,
+    baseline_section_scores: { reading_writing: { total: 460, information_and_ideas: 8, craft_and_structure: 7, expression_of_ideas: 7, standard_english_conventions: 7 }, math: { total: 460, algebra: 8, advanced_math: 6, problem_solving: 7, geometry_and_trig: 6 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 550, information_and_ideas: 11, craft_and_structure: 10, expression_of_ideas: 10, standard_english_conventions: 9 }, math: { total: 530, algebra: 10, advanced_math: 9, problem_solving: 9, geometry_and_trig: 8 } } as SATSectionScores,
+    total_weeks: 10, self_study_hours_per_week: 5, live_session_hours_per_week: 2, total_sessions: 20, created_at: "2025-10-01T00:00:00Z",
+  },
+  {
+    id: "hist_017", test_type: "SAT", baseline_composite: 1130, final_composite: 1260,
+    baseline_section_scores: { reading_writing: { total: 580, information_and_ideas: 12, craft_and_structure: 11, expression_of_ideas: 10, standard_english_conventions: 10 }, math: { total: 550, algebra: 11, advanced_math: 9, problem_solving: 9, geometry_and_trig: 8 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 650, information_and_ideas: 14, craft_and_structure: 13, expression_of_ideas: 12, standard_english_conventions: 12 }, math: { total: 610, algebra: 13, advanced_math: 11, problem_solving: 11, geometry_and_trig: 10 } } as SATSectionScores,
+    total_weeks: 8, self_study_hours_per_week: 5, live_session_hours_per_week: 2, total_sessions: 16, created_at: "2025-11-20T00:00:00Z",
+  },
+  {
+    id: "hist_018", test_type: "SAT", baseline_composite: 1070, final_composite: 1210,
+    baseline_section_scores: { reading_writing: { total: 540, information_and_ideas: 11, craft_and_structure: 10, expression_of_ideas: 9, standard_english_conventions: 9 }, math: { total: 530, algebra: 10, advanced_math: 8, problem_solving: 9, geometry_and_trig: 8 } } as SATSectionScores,
+    final_section_scores: { reading_writing: { total: 620, information_and_ideas: 13, craft_and_structure: 12, expression_of_ideas: 11, standard_english_conventions: 12 }, math: { total: 590, algebra: 12, advanced_math: 10, problem_solving: 11, geometry_and_trig: 10 } } as SATSectionScores,
+    total_weeks: 8, self_study_hours_per_week: 5, live_session_hours_per_week: 2, total_sessions: 16, created_at: "2025-12-01T00:00:00Z",
+  },
+  // ACT records (12)
+  {
+    id: "hist_019", test_type: "ACT", baseline_composite: 18, final_composite: 23,
+    baseline_section_scores: { english: { total: 17, usage_mechanics: 8, rhetorical_skills: 7 }, math: { total: 18, pre_algebra: 9, algebra: 7, geometry: 6 }, reading: { total: 19, social_studies_sciences: 9, arts_literature: 8 }, science: { total: 18, data_representation: 9, research_summaries: 7, conflicting_viewpoints: 6 } } as ACTSectionScores,
+    final_section_scores: { english: { total: 22, usage_mechanics: 12, rhetorical_skills: 10 }, math: { total: 23, pre_algebra: 13, algebra: 10, geometry: 9 }, reading: { total: 24, social_studies_sciences: 13, arts_literature: 11 }, science: { total: 23, data_representation: 13, research_summaries: 10, conflicting_viewpoints: 9 } } as ACTSectionScores,
+    total_weeks: 12, self_study_hours_per_week: 6, live_session_hours_per_week: 2, total_sessions: 24, created_at: "2025-03-01T00:00:00Z",
+  },
+  {
+    id: "hist_020", test_type: "ACT", baseline_composite: 20, final_composite: 25,
+    baseline_section_scores: { english: { total: 19, usage_mechanics: 9, rhetorical_skills: 8 }, math: { total: 20, pre_algebra: 10, algebra: 8, geometry: 7 }, reading: { total: 21, social_studies_sciences: 10, arts_literature: 9 }, science: { total: 20, data_representation: 10, research_summaries: 8, conflicting_viewpoints: 7 } } as ACTSectionScores,
+    final_section_scores: { english: { total: 24, usage_mechanics: 13, rhetorical_skills: 11 }, math: { total: 25, pre_algebra: 14, algebra: 11, geometry: 10 }, reading: { total: 26, social_studies_sciences: 14, arts_literature: 12 }, science: { total: 25, data_representation: 14, research_summaries: 11, conflicting_viewpoints: 10 } } as ACTSectionScores,
+    total_weeks: 10, self_study_hours_per_week: 5, live_session_hours_per_week: 2, total_sessions: 20, created_at: "2025-04-15T00:00:00Z",
+  },
+  {
+    id: "hist_021", test_type: "ACT", baseline_composite: 22, final_composite: 27,
+    baseline_section_scores: { english: { total: 21, usage_mechanics: 10, rhetorical_skills: 9 }, math: { total: 22, pre_algebra: 11, algebra: 9, geometry: 8 }, reading: { total: 23, social_studies_sciences: 11, arts_literature: 10 }, science: { total: 22, data_representation: 11, research_summaries: 9, conflicting_viewpoints: 8 } } as ACTSectionScores,
+    final_section_scores: { english: { total: 26, usage_mechanics: 14, rhetorical_skills: 12 }, math: { total: 27, pre_algebra: 15, algebra: 12, geometry: 11 }, reading: { total: 28, social_studies_sciences: 15, arts_literature: 13 }, science: { total: 27, data_representation: 15, research_summaries: 12, conflicting_viewpoints: 11 } } as ACTSectionScores,
+    total_weeks: 8, self_study_hours_per_week: 5, live_session_hours_per_week: 2, total_sessions: 16, created_at: "2025-05-20T00:00:00Z",
+  },
+  {
+    id: "hist_022", test_type: "ACT", baseline_composite: 24, final_composite: 28,
+    baseline_section_scores: { english: { total: 23, usage_mechanics: 11, rhetorical_skills: 10 }, math: { total: 24, pre_algebra: 12, algebra: 10, geometry: 9 }, reading: { total: 25, social_studies_sciences: 12, arts_literature: 11 }, science: { total: 24, data_representation: 12, research_summaries: 10, conflicting_viewpoints: 9 } } as ACTSectionScores,
+    final_section_scores: { english: { total: 27, usage_mechanics: 15, rhetorical_skills: 13 }, math: { total: 28, pre_algebra: 16, algebra: 13, geometry: 12 }, reading: { total: 29, social_studies_sciences: 16, arts_literature: 14 }, science: { total: 28, data_representation: 16, research_summaries: 13, conflicting_viewpoints: 12 } } as ACTSectionScores,
+    total_weeks: 8, self_study_hours_per_week: 6, live_session_hours_per_week: 3, total_sessions: 16, created_at: "2025-06-10T00:00:00Z",
+  },
+  {
+    id: "hist_023", test_type: "ACT", baseline_composite: 26, final_composite: 30,
+    baseline_section_scores: { english: { total: 25, usage_mechanics: 13, rhetorical_skills: 11 }, math: { total: 26, pre_algebra: 14, algebra: 11, geometry: 10 }, reading: { total: 27, social_studies_sciences: 14, arts_literature: 12 }, science: { total: 26, data_representation: 14, research_summaries: 11, conflicting_viewpoints: 10 } } as ACTSectionScores,
+    final_section_scores: { english: { total: 29, usage_mechanics: 16, rhetorical_skills: 14 }, math: { total: 30, pre_algebra: 17, algebra: 14, geometry: 13 }, reading: { total: 31, social_studies_sciences: 17, arts_literature: 15 }, science: { total: 30, data_representation: 17, research_summaries: 14, conflicting_viewpoints: 13 } } as ACTSectionScores,
+    total_weeks: 10, self_study_hours_per_week: 7, live_session_hours_per_week: 3, total_sessions: 20, created_at: "2025-07-15T00:00:00Z",
+  },
+  {
+    id: "hist_024", test_type: "ACT", baseline_composite: 19, final_composite: 24,
+    baseline_section_scores: { english: { total: 18, usage_mechanics: 8, rhetorical_skills: 8 }, math: { total: 19, pre_algebra: 10, algebra: 8, geometry: 7 }, reading: { total: 20, social_studies_sciences: 10, arts_literature: 8 }, science: { total: 19, data_representation: 10, research_summaries: 8, conflicting_viewpoints: 7 } } as ACTSectionScores,
+    final_section_scores: { english: { total: 23, usage_mechanics: 12, rhetorical_skills: 11 }, math: { total: 24, pre_algebra: 13, algebra: 11, geometry: 10 }, reading: { total: 25, social_studies_sciences: 13, arts_literature: 11 }, science: { total: 24, data_representation: 13, research_summaries: 11, conflicting_viewpoints: 10 } } as ACTSectionScores,
+    total_weeks: 10, self_study_hours_per_week: 5, live_session_hours_per_week: 2, total_sessions: 20, created_at: "2025-08-20T00:00:00Z",
+  },
+  {
+    id: "hist_025", test_type: "ACT", baseline_composite: 28, final_composite: 32,
+    baseline_section_scores: { english: { total: 27, usage_mechanics: 14, rhetorical_skills: 13 }, math: { total: 28, pre_algebra: 15, algebra: 13, geometry: 12 }, reading: { total: 29, social_studies_sciences: 15, arts_literature: 14 }, science: { total: 28, data_representation: 15, research_summaries: 13, conflicting_viewpoints: 12 } } as ACTSectionScores,
+    final_section_scores: { english: { total: 31, usage_mechanics: 17, rhetorical_skills: 15 }, math: { total: 32, pre_algebra: 17, algebra: 16, geometry: 15 }, reading: { total: 33, social_studies_sciences: 17, arts_literature: 16 }, science: { total: 32, data_representation: 17, research_summaries: 16, conflicting_viewpoints: 15 } } as ACTSectionScores,
+    total_weeks: 8, self_study_hours_per_week: 8, live_session_hours_per_week: 3, total_sessions: 16, created_at: "2025-09-10T00:00:00Z",
+  },
+  {
+    id: "hist_026", test_type: "ACT", baseline_composite: 21, final_composite: 25,
+    baseline_section_scores: { english: { total: 20, usage_mechanics: 10, rhetorical_skills: 9 }, math: { total: 21, pre_algebra: 11, algebra: 9, geometry: 8 }, reading: { total: 22, social_studies_sciences: 11, arts_literature: 9 }, science: { total: 21, data_representation: 11, research_summaries: 9, conflicting_viewpoints: 8 } } as ACTSectionScores,
+    final_section_scores: { english: { total: 24, usage_mechanics: 13, rhetorical_skills: 11 }, math: { total: 25, pre_algebra: 14, algebra: 11, geometry: 10 }, reading: { total: 26, social_studies_sciences: 14, arts_literature: 12 }, science: { total: 25, data_representation: 14, research_summaries: 11, conflicting_viewpoints: 10 } } as ACTSectionScores,
+    total_weeks: 8, self_study_hours_per_week: 4, live_session_hours_per_week: 2, total_sessions: 16, created_at: "2025-10-05T00:00:00Z",
+  },
+  {
+    id: "hist_027", test_type: "ACT", baseline_composite: 23, final_composite: 28,
+    baseline_section_scores: { english: { total: 22, usage_mechanics: 11, rhetorical_skills: 10 }, math: { total: 23, pre_algebra: 12, algebra: 10, geometry: 9 }, reading: { total: 24, social_studies_sciences: 12, arts_literature: 10 }, science: { total: 23, data_representation: 12, research_summaries: 10, conflicting_viewpoints: 9 } } as ACTSectionScores,
+    final_section_scores: { english: { total: 27, usage_mechanics: 15, rhetorical_skills: 13 }, math: { total: 28, pre_algebra: 16, algebra: 13, geometry: 12 }, reading: { total: 29, social_studies_sciences: 16, arts_literature: 14 }, science: { total: 28, data_representation: 16, research_summaries: 13, conflicting_viewpoints: 12 } } as ACTSectionScores,
+    total_weeks: 10, self_study_hours_per_week: 6, live_session_hours_per_week: 3, total_sessions: 20, created_at: "2025-11-15T00:00:00Z",
+  },
+  {
+    id: "hist_028", test_type: "ACT", baseline_composite: 25, final_composite: 29,
+    baseline_section_scores: { english: { total: 24, usage_mechanics: 12, rhetorical_skills: 11 }, math: { total: 25, pre_algebra: 13, algebra: 11, geometry: 10 }, reading: { total: 26, social_studies_sciences: 13, arts_literature: 12 }, science: { total: 25, data_representation: 13, research_summaries: 11, conflicting_viewpoints: 10 } } as ACTSectionScores,
+    final_section_scores: { english: { total: 28, usage_mechanics: 15, rhetorical_skills: 14 }, math: { total: 29, pre_algebra: 16, algebra: 14, geometry: 13 }, reading: { total: 30, social_studies_sciences: 16, arts_literature: 15 }, science: { total: 29, data_representation: 16, research_summaries: 14, conflicting_viewpoints: 13 } } as ACTSectionScores,
+    total_weeks: 8, self_study_hours_per_week: 6, live_session_hours_per_week: 2, total_sessions: 16, created_at: "2025-12-10T00:00:00Z",
+  },
+  {
+    id: "hist_029", test_type: "ACT", baseline_composite: 30, final_composite: 34,
+    baseline_section_scores: { english: { total: 29, usage_mechanics: 16, rhetorical_skills: 14 }, math: { total: 30, pre_algebra: 16, algebra: 15, geometry: 14 }, reading: { total: 31, social_studies_sciences: 16, arts_literature: 15 }, science: { total: 30, data_representation: 16, research_summaries: 15, conflicting_viewpoints: 14 } } as ACTSectionScores,
+    final_section_scores: { english: { total: 33, usage_mechanics: 18, rhetorical_skills: 16 }, math: { total: 34, pre_algebra: 18, algebra: 17, geometry: 16 }, reading: { total: 35, social_studies_sciences: 18, arts_literature: 17 }, science: { total: 34, data_representation: 18, research_summaries: 17, conflicting_viewpoints: 16 } } as ACTSectionScores,
+    total_weeks: 10, self_study_hours_per_week: 8, live_session_hours_per_week: 4, total_sessions: 20, created_at: "2026-01-05T00:00:00Z",
+  },
+];
