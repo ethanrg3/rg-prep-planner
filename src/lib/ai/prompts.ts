@@ -49,15 +49,15 @@ export function buildRoadmapUserPrompt(params: RoadmapPromptParams): string {
     const sat = sectionScores as SATSectionScores;
     scoreBreakdown = `
 Reading & Writing: ${sat.reading_writing.total}/800
-  - Information & Ideas: ${sat.reading_writing.information_and_ideas}/15
-  - Craft & Structure: ${sat.reading_writing.craft_and_structure}/15
-  - Expression of Ideas: ${sat.reading_writing.expression_of_ideas}/15
-  - Standard English Conventions: ${sat.reading_writing.standard_english_conventions}/15
+  - Information & Ideas: ${sat.reading_writing.information_and_ideas}/7
+  - Craft & Structure: ${sat.reading_writing.craft_and_structure}/7
+  - Expression of Ideas: ${sat.reading_writing.expression_of_ideas}/7
+  - Standard English Conventions: ${sat.reading_writing.standard_english_conventions}/7
 Math: ${sat.math.total}/800
-  - Algebra: ${sat.math.algebra}/15
-  - Advanced Math: ${sat.math.advanced_math}/15
-  - Problem Solving & Data Analysis: ${sat.math.problem_solving}/15
-  - Geometry & Trigonometry: ${sat.math.geometry_and_trig}/15`;
+  - Algebra: ${sat.math.algebra}/7
+  - Advanced Math: ${sat.math.advanced_math}/7
+  - Problem Solving & Data Analysis: ${sat.math.problem_solving}/7
+  - Geometry & Trigonometry: ${sat.math.geometry_and_trig}/7`;
   } else {
     const act = sectionScores as ACTSectionScores;
     scoreBreakdown = `
@@ -148,15 +148,15 @@ export function buildPredictionUserPrompt(params: PredictionPromptParams): strin
     const sat = sectionScores as SATSectionScores;
     scoreBreakdown = `
 Reading & Writing: ${sat.reading_writing.total}/800
-  - Information & Ideas: ${sat.reading_writing.information_and_ideas}/15
-  - Craft & Structure: ${sat.reading_writing.craft_and_structure}/15
-  - Expression of Ideas: ${sat.reading_writing.expression_of_ideas}/15
-  - Standard English Conventions: ${sat.reading_writing.standard_english_conventions}/15
+  - Information & Ideas: ${sat.reading_writing.information_and_ideas}/7
+  - Craft & Structure: ${sat.reading_writing.craft_and_structure}/7
+  - Expression of Ideas: ${sat.reading_writing.expression_of_ideas}/7
+  - Standard English Conventions: ${sat.reading_writing.standard_english_conventions}/7
 Math: ${sat.math.total}/800
-  - Algebra: ${sat.math.algebra}/15
-  - Advanced Math: ${sat.math.advanced_math}/15
-  - Problem Solving & Data Analysis: ${sat.math.problem_solving}/15
-  - Geometry & Trigonometry: ${sat.math.geometry_and_trig}/15`;
+  - Algebra: ${sat.math.algebra}/7
+  - Advanced Math: ${sat.math.advanced_math}/7
+  - Problem Solving & Data Analysis: ${sat.math.problem_solving}/7
+  - Geometry & Trigonometry: ${sat.math.geometry_and_trig}/7`;
   } else {
     const act = sectionScores as ACTSectionScores;
     scoreBreakdown = `

@@ -53,6 +53,221 @@ export const predictScoreTool: Tool = {
   },
 };
 
+export const extractScoreReportTool: Tool = {
+  name: "extract_score_report",
+  description:
+    "Extract scores from a College Board SAT score report image. Return all scores exactly as shown in the report.",
+  input_schema: {
+    type: "object" as const,
+    properties: {
+      report_label: {
+        type: "string",
+        description:
+          "The practice test label shown on the report (e.g., 'Practice 6', 'PSAT 1')",
+      },
+      report_date: {
+        type: "string",
+        description:
+          "The date shown on the report in ISO format (YYYY-MM-DD)",
+      },
+      composite_score: {
+        type: "number",
+        description: "Total SAT score (400-1600)",
+      },
+      reading_writing_total: {
+        type: "number",
+        description: "Reading and Writing section total (200-800)",
+      },
+      math_total: {
+        type: "number",
+        description: "Math section total (200-800)",
+      },
+      rw_subscores: {
+        type: "object",
+        description:
+          "Reading & Writing domain scores (each 1-7, representing filled boxes in 'Knowledge and Skills' section)",
+        properties: {
+          information_and_ideas: {
+            type: "number",
+            description: "Information and Ideas domain score (1-7)",
+          },
+          craft_and_structure: {
+            type: "number",
+            description: "Craft and Structure domain score (1-7)",
+          },
+          expression_of_ideas: {
+            type: "number",
+            description: "Expression of Ideas domain score (1-7)",
+          },
+          standard_english_conventions: {
+            type: "number",
+            description:
+              "Standard English Conventions domain score (1-7)",
+          },
+        },
+        required: [
+          "information_and_ideas",
+          "craft_and_structure",
+          "expression_of_ideas",
+          "standard_english_conventions",
+        ],
+      },
+      math_subscores: {
+        type: "object",
+        description:
+          "Math domain scores (each 1-7, representing filled boxes in 'Knowledge and Skills' section)",
+        properties: {
+          algebra: {
+            type: "number",
+            description: "Algebra domain score (1-7)",
+          },
+          advanced_math: {
+            type: "number",
+            description: "Advanced Math domain score (1-7)",
+          },
+          problem_solving: {
+            type: "number",
+            description:
+              "Problem-Solving and Data Analysis domain score (1-7)",
+          },
+          geometry_and_trig: {
+            type: "number",
+            description:
+              "Geometry and Trigonometry domain score (1-7)",
+          },
+        },
+        required: [
+          "algebra",
+          "advanced_math",
+          "problem_solving",
+          "geometry_and_trig",
+        ],
+      },
+    },
+    required: [
+      "report_label",
+      "report_date",
+      "composite_score",
+      "reading_writing_total",
+      "math_total",
+      "rw_subscores",
+      "math_subscores",
+    ],
+  },
+};
+
+export const generateInsightsTool: Tool = {
+  name: "generate_insights",
+  description:
+    "Analyze a student's score progression across multiple practice tests to identify priority focus areas, time allocation recommendations, strengths, and risk alerts.",
+  input_schema: {
+    type: "object" as const,
+    properties: {
+      summary: {
+        type: "string",
+        description:
+          "2-3 sentence executive summary of the student's progress and key recommendations",
+      },
+      priority_areas: {
+        type: "array",
+        description:
+          "Ordered list of areas to focus on, ranked by potential score impact",
+        items: {
+          type: "object",
+          properties: {
+            section: {
+              type: "string",
+              description:
+                "Section name (e.g., 'reading_writing', 'math')",
+            },
+            subscore: {
+              type: "string",
+              description:
+                "Specific subscore domain (e.g., 'geometry_and_trig', 'expression_of_ideas')",
+            },
+            reason: {
+              type: "string",
+              description: "Why this area should be prioritized",
+            },
+            impact_estimate: {
+              type: "string",
+              description:
+                "Estimated composite score impact if improved (e.g., '+30-50 points')",
+            },
+            recommended_resources: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "2-3 specific resource or activity suggestions",
+            },
+          },
+          required: [
+            "section",
+            "subscore",
+            "reason",
+            "impact_estimate",
+            "recommended_resources",
+          ],
+        },
+      },
+      time_allocation: {
+        type: "object",
+        description:
+          "Recommended percentage of study time per section (values should sum to 100)",
+        additionalProperties: {
+          type: "number",
+          description: "Percentage of study time (0-100)",
+        },
+      },
+      strengths: {
+        type: "array",
+        description: "Areas where the student is performing well",
+        items: {
+          type: "object",
+          properties: {
+            section: { type: "string" },
+            subscore: { type: "string" },
+            note: {
+              type: "string",
+              description:
+                "Brief note about performance and maintenance advice",
+            },
+          },
+          required: ["section", "subscore", "note"],
+        },
+      },
+      risk_alerts: {
+        type: "array",
+        description: "Areas showing decline or stagnation that need attention",
+        items: {
+          type: "object",
+          properties: {
+            section: { type: "string" },
+            subscore: { type: "string" },
+            alert: {
+              type: "string",
+              description: "Description of the risk",
+            },
+            severity: {
+              type: "string",
+              enum: ["high", "medium"],
+              description: "How urgent this risk is",
+            },
+          },
+          required: ["section", "subscore", "alert", "severity"],
+        },
+      },
+    },
+    required: [
+      "summary",
+      "priority_areas",
+      "time_allocation",
+      "strengths",
+      "risk_alerts",
+    ],
+  },
+};
+
 export const generatePrepPlanTool: Tool = {
   name: "generate_prep_plan",
   description:

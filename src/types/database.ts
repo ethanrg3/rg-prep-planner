@@ -115,12 +115,15 @@ export interface ScoreReport {
   id: string;
   student_id: string;
   report_type: ReportType;
+  report_label: string;
+  report_date: string;
   composite_score: number;
   section_scores: SectionScores;
   prediction_range_low: number | null;
   prediction_range_high: number | null;
   section_predictions: Record<string, SectionPrediction> | null;
   confidence_notes: string | null;
+  source_image_url: string | null;
   created_at: string;
 }
 

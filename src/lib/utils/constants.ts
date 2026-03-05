@@ -4,7 +4,7 @@ export const SAT_COMPOSITE_MAX = 1600;
 export const SAT_SECTION_MIN = 200;
 export const SAT_SECTION_MAX = 800;
 export const SAT_SUBSCORE_MIN = 1;
-export const SAT_SUBSCORE_MAX = 15;
+export const SAT_SUBSCORE_MAX = 7;
 
 export const SAT_RW_SUBSCORES = [
   { key: "information_and_ideas", label: "Information & Ideas" },

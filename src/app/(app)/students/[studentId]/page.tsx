@@ -13,17 +13,18 @@ import {
   Target,
   Clock,
   FileText,
-  ChevronDown,
-  ChevronUp,
+  BarChart3,
 } from "lucide-react";
-import {
-  SAT_RW_SUBSCORES,
-  SAT_MATH_SUBSCORES,
-  SAT_SUBSCORE_MAX,
-} from "@/lib/utils/constants";
 import { PlanView } from "@/components/plan/plan-view";
 import type { PlanWeekData } from "@/components/plan/plan-timeline";
 import { ScorePredictionPanel } from "@/components/scores/score-prediction-panel";
+import { AddScoreReportDialog } from "@/components/scores/add-score-report-dialog";
+import { CompositeTrendChart } from "@/components/scores/composite-trend-chart";
+import { SectionTrendChart } from "@/components/scores/section-trend-chart";
+import { SubscoreTrendGrid } from "@/components/scores/subscore-trend-grid";
+import { ScoreReportList } from "@/components/scores/score-report-list";
+import { InsightsPanel } from "@/components/insights/insights-panel";
+import type { ScoreReport } from "@/types/database";
 
 // TODO: Replace with Supabase fetch by studentId
 const mockStudent = {
@@ -44,16 +45,16 @@ const mockStudent = {
   baselineRW: 620,
   baselineMath: 500,
   baselineRWSubscores: {
-    information_and_ideas: 14,
-    craft_and_structure: 12,
-    expression_of_ideas: 10,
-    standard_english_conventions: 11,
+    information_and_ideas: 5,
+    craft_and_structure: 4,
+    expression_of_ideas: 3,
+    standard_english_conventions: 4,
   },
   baselineMathSubscores: {
-    algebra: 10,
-    advanced_math: 8,
-    problem_solving: 9,
-    geometry_and_trig: 7,
+    algebra: 4,
+    advanced_math: 3,
+    problem_solving: 3,
+    geometry_and_trig: 2,
   },
   predictedLow: 1240,
   predictedHigh: 1310,
@@ -61,6 +62,64 @@ const mockStudent = {
   sessionsCompleted: 6,
   weeksRemaining: 5,
 };
+
+// Mock score reports for progress tracking demo
+const initialMockScoreReports: ScoreReport[] = [
+  {
+    id: "sr_001",
+    student_id: "1",
+    report_type: "baseline",
+    report_label: "Baseline (Practice 3)",
+    report_date: "2026-01-10",
+    composite_score: 1120,
+    section_scores: {
+      reading_writing: { total: 620, information_and_ideas: 5, craft_and_structure: 4, expression_of_ideas: 3, standard_english_conventions: 4 },
+      math: { total: 500, algebra: 4, advanced_math: 3, problem_solving: 3, geometry_and_trig: 2 },
+    },
+    prediction_range_low: null,
+    prediction_range_high: null,
+    section_predictions: null,
+    confidence_notes: null,
+    source_image_url: null,
+    created_at: "2026-01-10T00:00:00Z",
+  },
+  {
+    id: "sr_002",
+    student_id: "1",
+    report_type: "actual",
+    report_label: "Practice 4",
+    report_date: "2026-01-28",
+    composite_score: 1170,
+    section_scores: {
+      reading_writing: { total: 640, information_and_ideas: 5, craft_and_structure: 5, expression_of_ideas: 3, standard_english_conventions: 5 },
+      math: { total: 530, algebra: 5, advanced_math: 3, problem_solving: 4, geometry_and_trig: 2 },
+    },
+    prediction_range_low: null,
+    prediction_range_high: null,
+    section_predictions: null,
+    confidence_notes: null,
+    source_image_url: null,
+    created_at: "2026-01-28T00:00:00Z",
+  },
+  {
+    id: "sr_003",
+    student_id: "1",
+    report_type: "actual",
+    report_label: "Practice 6",
+    report_date: "2026-02-16",
+    composite_score: 1210,
+    section_scores: {
+      reading_writing: { total: 660, information_and_ideas: 6, craft_and_structure: 5, expression_of_ideas: 4, standard_english_conventions: 5 },
+      math: { total: 550, algebra: 5, advanced_math: 4, problem_solving: 4, geometry_and_trig: 3 },
+    },
+    prediction_range_low: null,
+    prediction_range_high: null,
+    section_predictions: null,
+    confidence_notes: null,
+    source_image_url: null,
+    created_at: "2026-02-16T00:00:00Z",
+  },
+];
 
 // TODO: Replace with Supabase fetch
 const mockPlanWeeks: PlanWeekData[] = [
@@ -213,29 +272,12 @@ const mockPlanWeeks: PlanWeekData[] = [
   },
 ];
 
-function ScoreBar({ value, max }: { value: number; max: number }) {
-  const pct = Math.round((value / max) * 100);
-  return (
-    <div className="flex items-center gap-2">
-      <div className="h-2 flex-1 rounded-full bg-slate-100">
-        <div
-          className="h-2 rounded-full bg-current transition-all"
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-      <span className="min-w-[2.5rem] text-right text-xs font-medium">
-        {value}/{max}
-      </span>
-    </div>
-  );
-}
-
 export default function StudentDetailPage() {
   const s = mockStudent;
-  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [scoreReports, setScoreReports] = useState<ScoreReport[]>(initialMockScoreReports);
 
-  function toggleSection(section: string) {
-    setExpandedSection(expandedSection === section ? null : section);
+  function handleReportAdded(report: ScoreReport) {
+    setScoreReports((prev) => [...prev, report]);
   }
 
   return (
@@ -294,6 +336,7 @@ export default function StudentDetailPage() {
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="plan">Plan</TabsTrigger>
             <TabsTrigger value="scores">Scores</TabsTrigger>
+            <TabsTrigger value="insights">Insights</TabsTrigger>
             <TabsTrigger value="sessions">Sessions</TabsTrigger>
           </TabsList>
         </div>
@@ -440,95 +483,33 @@ export default function StudentDetailPage() {
         {/* Scores Tab */}
         <TabsContent value="scores">
           <div className="space-y-6">
-            {/* Baseline Scores Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Baseline Scores</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="text-center">
-                  <p className="text-3xl font-bold">{s.baselineComposite}</p>
-                  <p className="text-sm text-muted-foreground">Composite</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4 pt-2">
-                  {/* R&W Section - Clickable */}
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() => toggleSection("rw")}
-                      className="w-full rounded-lg bg-blue-50 p-3 text-center transition-colors hover:bg-blue-100"
-                    >
-                      <div className="flex items-center justify-center gap-1">
-                        <p className="text-lg font-semibold text-blue-700">
-                          {s.baselineRW}
-                        </p>
-                        {expandedSection === "rw" ? (
-                          <ChevronUp className="h-4 w-4 text-blue-500" />
-                        ) : (
-                          <ChevronDown className="h-4 w-4 text-blue-500" />
-                        )}
-                      </div>
-                      <p className="text-xs text-blue-600">Reading & Writing</p>
-                    </button>
-                    {expandedSection === "rw" && (
-                      <div className="mt-2 space-y-2 rounded-lg border border-blue-100 bg-blue-50/50 p-3 text-blue-700">
-                        {SAT_RW_SUBSCORES.map((sub) => (
-                          <div key={sub.key}>
-                            <p className="mb-0.5 text-xs">{sub.label}</p>
-                            <ScoreBar
-                              value={
-                                s.baselineRWSubscores[
-                                  sub.key as keyof typeof s.baselineRWSubscores
-                                ]
-                              }
-                              max={SAT_SUBSCORE_MAX}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+            {/* Header with Add button */}
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Score Reports</h2>
+              <AddScoreReportDialog
+                studentId={s.id}
+                onReportAdded={handleReportAdded}
+              />
+            </div>
 
-                  {/* Math Section - Clickable */}
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() => toggleSection("math")}
-                      className="w-full rounded-lg bg-emerald-50 p-3 text-center transition-colors hover:bg-emerald-100"
-                    >
-                      <div className="flex items-center justify-center gap-1">
-                        <p className="text-lg font-semibold text-emerald-700">
-                          {s.baselineMath}
-                        </p>
-                        {expandedSection === "math" ? (
-                          <ChevronUp className="h-4 w-4 text-emerald-500" />
-                        ) : (
-                          <ChevronDown className="h-4 w-4 text-emerald-500" />
-                        )}
-                      </div>
-                      <p className="text-xs text-emerald-600">Math</p>
-                    </button>
-                    {expandedSection === "math" && (
-                      <div className="mt-2 space-y-2 rounded-lg border border-emerald-100 bg-emerald-50/50 p-3 text-emerald-700">
-                        {SAT_MATH_SUBSCORES.map((sub) => (
-                          <div key={sub.key}>
-                            <p className="mb-0.5 text-xs">{sub.label}</p>
-                            <ScoreBar
-                              value={
-                                s.baselineMathSubscores[
-                                  sub.key as keyof typeof s.baselineMathSubscores
-                                ]
-                              }
-                              max={SAT_SUBSCORE_MAX}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            {scoreReports.length === 1 && (
+              <Card className="border-blue-100 bg-blue-50/50">
+                <CardContent className="flex items-center gap-3 p-4">
+                  <BarChart3 className="h-5 w-5 text-blue-500" />
+                  <p className="text-sm text-blue-800">
+                    Add more score reports to see progress charts and trend analysis.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Progress Charts (2+ reports) */}
+            <CompositeTrendChart reports={scoreReports} />
+            <SectionTrendChart reports={scoreReports} />
+            <SubscoreTrendGrid reports={scoreReports} />
+
+            {/* Score Report History */}
+            <ScoreReportList reports={scoreReports} />
 
             {/* Score Prediction Panel */}
             <ScorePredictionPanel
@@ -545,6 +526,18 @@ export default function StudentDetailPage() {
               totalSessions={s.sessionsPaid}
             />
           </div>
+        </TabsContent>
+
+        {/* Insights Tab */}
+        <TabsContent value="insights">
+          <InsightsPanel
+            studentId={s.id}
+            testType={s.testType}
+            scoreReports={scoreReports}
+            testDate={s.testDate}
+            selfStudyHoursPerWeek={s.selfStudyHoursPerWeek}
+            liveSessionHoursPerWeek={s.liveSessionHoursPerWeek}
+          />
         </TabsContent>
 
         {/* Sessions Tab */}
