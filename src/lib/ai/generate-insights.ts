@@ -105,7 +105,7 @@ export async function generateInsights(
   });
 
   const response = await client.messages.create({
-    model: "claude-sonnet-4-6",
+    model: "claude-sonnet-4-5-20250514",
     max_tokens: 4096,
     system: buildInsightsSystemPrompt(),
     tools: [generateInsightsTool],
