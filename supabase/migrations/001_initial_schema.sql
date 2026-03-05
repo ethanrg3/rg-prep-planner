@@ -60,12 +60,15 @@ CREATE TABLE score_reports (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   report_type TEXT NOT NULL CHECK (report_type IN ('baseline', 'predicted', 'actual')),
+  report_label TEXT NOT NULL DEFAULT '',
+  report_date DATE NOT NULL DEFAULT CURRENT_DATE,
   composite_score INTEGER NOT NULL,
   section_scores JSONB NOT NULL,
   prediction_range_low INTEGER,
   prediction_range_high INTEGER,
   section_predictions JSONB,
   confidence_notes TEXT,
+  source_image_url TEXT,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 

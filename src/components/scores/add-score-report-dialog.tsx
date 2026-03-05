@@ -13,6 +13,7 @@ import { Plus, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { ImageUploadArea } from "./image-upload-area";
 import { ScoreVerificationForm } from "./score-verification-form";
+import { saveScoreReportAction } from "@/lib/actions/student-actions";
 import type { ExtractedScoreReport } from "@/lib/ai/extract-score-report";
 import type { ScoreReport } from "@/types/database";
 
@@ -72,16 +73,9 @@ export function AddScoreReportDialog({
     }
   }
 
-  function handleConfirm(data: ExtractedScoreReport) {
-    // Convert to ScoreReport format
-    const report: ScoreReport = {
-      id: `sr_${Date.now()}`,
-      student_id: studentId,
-      report_type: "actual",
-      report_label: data.report_label,
-      report_date: data.report_date,
-      composite_score: data.composite_score,
-      section_scores: {
+  async function handleConfirm(data: ExtractedScoreReport) {
+    try {
+      const sectionScores = {
         reading_writing: {
           total: data.reading_writing_total,
           information_and_ideas: data.rw_subscores.information_and_ideas,
@@ -96,19 +90,25 @@ export function AddScoreReportDialog({
           problem_solving: data.math_subscores.problem_solving,
           geometry_and_trig: data.math_subscores.geometry_and_trig,
         },
-      },
-      prediction_range_low: null,
-      prediction_range_high: null,
-      section_predictions: null,
-      confidence_notes: null,
-      source_image_url: null,
-      created_at: new Date().toISOString(),
-    };
+      };
 
-    onReportAdded(report);
-    toast.success(`Score report "${data.report_label}" saved!`);
-    setOpen(false);
-    resetDialog();
+      const report = await saveScoreReportAction({
+        studentId,
+        reportType: "actual",
+        reportLabel: data.report_label,
+        reportDate: data.report_date,
+        compositeScore: data.composite_score,
+        sectionScores,
+      });
+
+      onReportAdded(report);
+      toast.success(`Score report "${data.report_label}" saved!`);
+      setOpen(false);
+      resetDialog();
+    } catch (error) {
+      console.error("Failed to save score report:", error);
+      toast.error("Failed to save score report. Please try again.");
+    }
   }
 
   return (

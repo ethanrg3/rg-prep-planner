@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Check, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { createStudentAction } from "@/lib/actions/student-actions";
 
 import { StepBasicInfo } from "./step-basic-info";
 import { StepTestDetails } from "./step-test-details";
@@ -190,15 +191,10 @@ export function IntakeWizard() {
   async function onSubmit(data: FieldValues) {
     setIsSubmitting(true);
     try {
-      // TODO: Replace with actual Supabase insert via server action
-      console.log("Submitting student data:", data);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Redirect to students list (or to plan generation if generatePlan is true)
-      toast.success("Student created successfully");
-      router.push("/students");
+      const formData = data as IntakeFormData;
+      const result = await createStudentAction(formData);
+      toast.success("Student created successfully!");
+      router.push(`/students/${result.studentId}`);
     } catch (error) {
       console.error("Failed to create student:", error);
       toast.error("Failed to create student. Please try again.");

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateRoadmap } from "@/lib/ai/generate-roadmap";
+import { createPlan } from "@/lib/db/plans";
 import type { SATSectionScores, ACTSectionScores } from "@/types/database";
 
 interface GeneratePlanRequest {
@@ -41,13 +42,13 @@ export async function POST(request: NextRequest) {
       tutorNotes: body.tutorNotes,
     });
 
-    // TODO: Insert into Supabase prep_plans, plan_weeks, plan_sessions tables
-    // For now, return the generated plan directly
+    // Persist to database
+    const saved = await createPlan(body.studentId, plan.weeks, plan.model);
 
     return NextResponse.json({
       success: true,
       plan: {
-        id: `plan_${Date.now()}`,
+        id: saved.id,
         studentId: body.studentId,
         totalWeeks: body.totalWeeks,
         status: "draft",

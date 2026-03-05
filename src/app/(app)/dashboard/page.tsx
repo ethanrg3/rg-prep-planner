@@ -1,42 +1,42 @@
+export const dynamic = "force-dynamic";
+
 import { StatCard } from "@/components/dashboard/stat-card";
 import { UpcomingSessions } from "@/components/dashboard/upcoming-sessions";
 import { RecentActivity, type ActivityType } from "@/components/dashboard/recent-activity";
 import { Users, ClipboardList, CalendarDays, TrendingUp } from "lucide-react";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { DEFAULT_TUTOR_ID } from "@/lib/supabase/constants";
 
-// TODO: Re-enable Supabase queries once connected. This is placeholder data for UI preview.
+async function getDashboardStats() {
+  const supabase = createAdminClient();
 
+  const [studentsResult, plansResult] = await Promise.all([
+    supabase
+      .from("students")
+      .select("id", { count: "exact", head: true })
+      .eq("tutor_id", DEFAULT_TUTOR_ID)
+      .eq("status", "active"),
+    supabase
+      .from("prep_plans")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "draft"),
+  ]);
+
+  return {
+    activeStudents: studentsResult.count ?? 0,
+    pendingPlans: plansResult.count ?? 0,
+  };
+}
+
+// Sessions and activity remain placeholder until scheduling is implemented
 const mockSessions = [
   {
     id: "1",
-    studentName: "Sarah Johnson",
-    weekNumber: 3,
-    theme: "Algebra & Reading Comprehension",
-    scheduledDate: "Mon 2/10",
-    scheduledTime: "4:00 PM",
-  },
-  {
-    id: "2",
-    studentName: "Mike Chen",
-    weekNumber: 1,
-    theme: "English Foundations & Data Analysis",
-    scheduledDate: "Tue 2/11",
-    scheduledTime: "3:30 PM",
-  },
-  {
-    id: "3",
-    studentName: "Emma Davis",
-    weekNumber: 5,
-    theme: "Practice Test #2 Review",
-    scheduledDate: "Wed 2/12",
-    scheduledTime: "5:00 PM",
-  },
-  {
-    id: "4",
-    studentName: "Sarah Johnson",
-    weekNumber: 3,
-    theme: "Algebra & Reading Comprehension",
-    scheduledDate: "Thu 2/13",
-    scheduledTime: "4:00 PM",
+    studentName: "No sessions scheduled",
+    weekNumber: 0,
+    theme: "Add students and generate plans to see sessions",
+    scheduledDate: "—",
+    scheduledTime: "—",
   },
 ];
 
@@ -44,42 +44,20 @@ const mockActivities: { id: string; type: ActivityType; description: string; tim
   {
     id: "a1",
     type: "student_created",
-    description: "Mike Chen added as a new student",
-    timestamp: "2 hours ago",
-  },
-  {
-    id: "a2",
-    type: "plan_generated",
-    description: "Prep plan generated for Emma Davis",
-    timestamp: "5 hours ago",
-  },
-  {
-    id: "a3",
-    type: "plan_approved",
-    description: "Sarah Johnson's prep plan was approved",
-    timestamp: "1 day ago",
-  },
-  {
-    id: "a4",
-    type: "student_created",
-    description: "Emma Davis added as a new student",
-    timestamp: "2 days ago",
-  },
-  {
-    id: "a5",
-    type: "plan_generated",
-    description: "Prep plan generated for Sarah Johnson",
-    timestamp: "3 days ago",
+    description: "Add your first student to get started",
+    timestamp: "—",
   },
 ];
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const stats = await getDashboardStats();
+
   return (
     <div>
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
         <p className="text-muted-foreground">
-          Welcome back, Ethan Garcia
+          Welcome back
         </p>
       </div>
 
@@ -87,27 +65,27 @@ export default function DashboardPage() {
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Active Students"
-          value={12}
+          value={stats.activeStudents}
           icon={Users}
           accent="blue"
         />
         <StatCard
           title="Plans Pending"
-          value={2}
+          value={stats.pendingPlans}
           subtitle="Awaiting approval"
           icon={ClipboardList}
           accent="orange"
         />
         <StatCard
           title="Sessions This Week"
-          value={5}
+          value={0}
           icon={CalendarDays}
           accent="green"
         />
         <StatCard
           title="Avg Improvement"
-          value="+142"
-          subtitle="across 8 students"
+          value="—"
+          subtitle="Add score reports to track"
           icon={TrendingUp}
           accent="slate"
         />

@@ -31,7 +31,7 @@ export async function extractScoreReport(
   });
 
   const response = await client.messages.create({
-    model: "claude-sonnet-4-5-20250514",
+    model: "claude-sonnet-4-6",
     max_tokens: 2048,
     system: `You are an OCR specialist for College Board SAT score reports from the Bluebook digital SAT platform. Extract all scores exactly as shown in the report image.
 
