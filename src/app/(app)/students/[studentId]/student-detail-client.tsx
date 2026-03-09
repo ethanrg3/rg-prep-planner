@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,6 +28,7 @@ import { ScoreReportList } from "@/components/scores/score-report-list";
 import { InsightsPanel } from "@/components/insights/insights-panel";
 import type { ScoreReport } from "@/types/database";
 import type { StudentDetail } from "@/lib/db/students";
+import { deleteScoreReportAction } from "@/lib/actions/student-actions";
 
 interface StudentDetailClientProps {
   student: StudentDetail;
@@ -42,9 +45,25 @@ export function StudentDetailClient({
 }: StudentDetailClientProps) {
   const [scoreReports, setScoreReports] =
     useState<ScoreReport[]>(initialScoreReports);
+  const router = useRouter();
 
   function handleReportAdded(report: ScoreReport) {
     setScoreReports((prev) => [...prev, report]);
+  }
+
+  async function handleReportDeleted(reportId: string) {
+    try {
+      await deleteScoreReportAction({
+        studentId: s.id,
+        reportId,
+      });
+      setScoreReports((prev) => prev.filter((report) => report.id !== reportId));
+      router.refresh();
+      toast.success("Score report deleted.");
+    } catch (error) {
+      console.error("Failed to delete score report:", error);
+      toast.error("Failed to delete score report. Please try again.");
+    }
   }
 
   return (
@@ -290,7 +309,10 @@ export function StudentDetailClient({
             <SubscoreTrendGrid reports={scoreReports} />
 
             {/* Score Report History */}
-            <ScoreReportList reports={scoreReports} />
+            <ScoreReportList
+              reports={scoreReports}
+              onDelete={handleReportDeleted}
+            />
 
             {/* Score Prediction Panel */}
             {s.baselineComposite > 0 && (

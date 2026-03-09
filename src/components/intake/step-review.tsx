@@ -98,6 +98,10 @@ export function StepReview({ form }: StepReviewProps) {
               <p className="mb-2 text-lg font-bold">
                 Composite: {scores.compositeScore}
               </p>
+              <p className="mb-2 text-muted-foreground">
+                Report type:{" "}
+                {data.baselineReportSource === "official" ? "Official" : "Practice"}
+              </p>
               {basicInfo.testType === "SAT" && data.satScores && (
                 <div className="grid gap-2 sm:grid-cols-2">
                   <div>

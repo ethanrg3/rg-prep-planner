@@ -2,9 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { createStudent } from "@/lib/db/students";
-import { createScoreReport } from "@/lib/db/score-reports";
+import { createScoreReport, deleteScoreReport } from "@/lib/db/score-reports";
 import type { IntakeFormData } from "@/lib/schemas/intake-form";
-import type { SectionScores } from "@/types/database";
+import type { ReportSource, SectionScores } from "@/types/database";
 
 export async function createStudentAction(
   data: IntakeFormData
@@ -82,6 +82,7 @@ export async function createStudentAction(
   await createScoreReport({
     studentId: student.id,
     reportType: "baseline",
+    reportSource: data.baselineReportSource,
     reportLabel: "Baseline",
     reportDate: new Date().toISOString().split("T")[0],
     compositeScore,
@@ -95,6 +96,7 @@ export async function createStudentAction(
 export async function saveScoreReportAction(data: {
   studentId: string;
   reportType: "baseline" | "actual";
+  reportSource: ReportSource;
   reportLabel: string;
   reportDate: string;
   compositeScore: number;
@@ -104,6 +106,7 @@ export async function saveScoreReportAction(data: {
   const report = await createScoreReport({
     studentId: data.studentId,
     reportType: data.reportType,
+    reportSource: data.reportSource,
     reportLabel: data.reportLabel,
     reportDate: data.reportDate,
     compositeScore: data.compositeScore,
@@ -113,4 +116,12 @@ export async function saveScoreReportAction(data: {
 
   revalidatePath(`/students/${data.studentId}`);
   return report;
+}
+
+export async function deleteScoreReportAction(data: {
+  studentId: string;
+  reportId: string;
+}) {
+  await deleteScoreReport(data.studentId, data.reportId);
+  revalidatePath(`/students/${data.studentId}`);
 }

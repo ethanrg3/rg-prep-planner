@@ -4,7 +4,8 @@ import { useState } from "react";
 import { format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { ScoreReport, SATSectionScores } from "@/types/database";
 import {
   SAT_RW_SUBSCORES,
@@ -14,6 +15,7 @@ import {
 
 interface ScoreReportListProps {
   reports: ScoreReport[];
+  onDelete: (reportId: string) => Promise<void>;
 }
 
 function ScoreBar({ value, max }: { value: number; max: number }) {
@@ -33,39 +35,79 @@ function ScoreBar({ value, max }: { value: number; max: number }) {
   );
 }
 
-function ReportRow({ report, isFirst }: { report: ScoreReport; isFirst: boolean }) {
+function ReportRow({
+  report,
+  isFirst,
+  onDelete,
+}: {
+  report: ScoreReport;
+  isFirst: boolean;
+  onDelete: (reportId: string) => Promise<void>;
+}) {
   const [expanded, setExpanded] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const sat = report.section_scores as SATSectionScores;
+
+  async function handleDelete() {
+    const confirmed = window.confirm(
+      `Delete "${report.report_label}" from ${format(new Date(report.report_date), "MMM d, yyyy")}?`
+    );
+    if (!confirmed) return;
+
+    setIsDeleting(true);
+    try {
+      await onDelete(report.id);
+    } finally {
+      setIsDeleting(false);
+    }
+  }
 
   return (
     <div className="border-b last:border-b-0">
-      <button
-        type="button"
-        className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50"
-        onClick={() => setExpanded(!expanded)}
-      >
-        <div className="min-w-[5rem] text-xs text-muted-foreground">
-          {format(new Date(report.report_date), "MMM d, yyyy")}
-        </div>
-        <div className="flex flex-1 items-center gap-2">
-          <span className="text-sm font-medium">{report.report_label}</span>
-          {isFirst && (
-            <Badge variant="outline" className="text-[10px]">
-              Baseline
+      <div className="flex items-center gap-1 px-2 py-1">
+        <button
+          type="button"
+          className="flex flex-1 items-center gap-3 rounded px-2 py-2 text-left transition-colors hover:bg-slate-50"
+          onClick={() => setExpanded(!expanded)}
+        >
+          <div className="min-w-[5rem] text-xs text-muted-foreground">
+            {format(new Date(report.report_date), "MMM d, yyyy")}
+          </div>
+          <div className="flex flex-1 items-center gap-2">
+            <span className="text-sm font-medium">{report.report_label}</span>
+            {isFirst && (
+              <Badge variant="outline" className="text-[10px]">
+                Baseline
+              </Badge>
+            )}
+            <Badge variant="secondary" className="text-[10px]">
+              {report.report_source === "official" ? "Official" : "Practice"}
             </Badge>
-          )}
-        </div>
-        <div className="flex items-center gap-4 text-sm">
-          <span className="font-bold">{report.composite_score}</span>
-          <span className="text-blue-600">{sat.reading_writing.total}</span>
-          <span className="text-emerald-600">{sat.math.total}</span>
-          {expanded ? (
-            <ChevronUp className="h-4 w-4 text-muted-foreground" />
-          ) : (
-            <ChevronDown className="h-4 w-4 text-muted-foreground" />
-          )}
-        </div>
-      </button>
+          </div>
+          <div className="flex items-center gap-4 text-sm">
+            <span className="font-bold">{report.composite_score}</span>
+            <span className="text-blue-600">{sat.reading_writing.total}</span>
+            <span className="text-emerald-600">{sat.math.total}</span>
+            {expanded ? (
+              <ChevronUp className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            )}
+          </div>
+        </button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 text-muted-foreground hover:text-red-600"
+          onClick={handleDelete}
+          disabled={isDeleting}
+          title="Delete score report"
+        >
+          <Trash2 className="h-4 w-4" />
+          <span className="sr-only">Delete score report</span>
+        </Button>
+      </div>
 
       {expanded && (
         <div className="grid grid-cols-2 gap-4 bg-slate-50/50 px-4 py-3">
@@ -99,7 +141,7 @@ function ReportRow({ report, isFirst }: { report: ScoreReport; isFirst: boolean 
   );
 }
 
-export function ScoreReportList({ reports }: ScoreReportListProps) {
+export function ScoreReportList({ reports, onDelete }: ScoreReportListProps) {
   const sorted = [...reports].sort(
     (a, b) =>
       new Date(b.report_date).getTime() - new Date(a.report_date).getTime()
@@ -136,6 +178,7 @@ export function ScoreReportList({ reports }: ScoreReportListProps) {
               key={report.id}
               report={report}
               isFirst={report.id === earliest?.id}
+              onDelete={onDelete}
             />
           ))}
         </div>

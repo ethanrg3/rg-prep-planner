@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { Upload, FileImage, X } from "lucide-react";
+import { Upload, FileText, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ImageUploadAreaProps {
@@ -10,17 +10,16 @@ interface ImageUploadAreaProps {
 }
 
 export function ImageUploadArea({ onFileSelect, isLoading }: ImageUploadAreaProps) {
-  const [preview, setPreview] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = useCallback(
     (file: File) => {
+      if (file.type !== "application/pdf") {
+        return;
+      }
       setFileName(file.name);
-      const reader = new FileReader();
-      reader.onload = (e) => setPreview(e.target?.result as string);
-      reader.readAsDataURL(file);
       onFileSelect(file);
     },
     [onFileSelect]
@@ -48,20 +47,18 @@ export function ImageUploadArea({ onFileSelect, isLoading }: ImageUploadAreaProp
   }
 
   function clearPreview() {
-    setPreview(null);
     setFileName(null);
     if (inputRef.current) inputRef.current.value = "";
   }
 
-  if (preview) {
+  if (fileName) {
     return (
       <div className="space-y-3">
-        <div className="relative rounded-lg border bg-slate-50 p-2">
-          <img
-            src={preview}
-            alt="Score report preview"
-            className="mx-auto max-h-64 rounded object-contain"
-          />
+        <div className="relative rounded-lg border bg-slate-50 p-4">
+          <div className="flex items-center gap-2 text-sm">
+            <FileText className="h-5 w-5 text-muted-foreground" />
+            <span className="truncate font-medium">{fileName}</span>
+          </div>
           {!isLoading && (
             <Button
               type="button"
@@ -73,10 +70,6 @@ export function ImageUploadArea({ onFileSelect, isLoading }: ImageUploadAreaProp
               <X className="h-4 w-4" />
             </Button>
           )}
-        </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <FileImage className="h-4 w-4" />
-          <span className="truncate">{fileName}</span>
         </div>
       </div>
     );
@@ -103,16 +96,16 @@ export function ImageUploadArea({ onFileSelect, isLoading }: ImageUploadAreaProp
           }`}
         />
         <p className="mb-1 text-sm font-medium">
-          {isDragging ? "Drop score report here" : "Drop score report image here"}
+          {isDragging ? "Drop score report PDF here" : "Drop score report PDF here"}
         </p>
         <p className="text-xs text-muted-foreground">
-          PNG, JPG, or WebP (max 10MB)
+          PDF only (max 10MB)
         </p>
       </button>
       <input
         ref={inputRef}
         type="file"
-        accept="image/png,image/jpeg,image/webp"
+        accept="application/pdf"
         className="hidden"
         onChange={handleInputChange}
       />

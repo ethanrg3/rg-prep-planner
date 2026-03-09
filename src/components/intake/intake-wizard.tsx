@@ -62,6 +62,7 @@ export function IntakeWizard() {
       },
       satScores: undefined,
       actScores: undefined,
+      baselineReportSource: "practice" as const,
       schedule: {
         selfStudyHoursPerWeek: 5,
         liveSessionHoursPerWeek: 2,

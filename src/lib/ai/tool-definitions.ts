@@ -56,7 +56,7 @@ export const predictScoreTool: Tool = {
 export const extractScoreReportTool: Tool = {
   name: "extract_score_report",
   description:
-    "Extract scores from a College Board SAT score report image. Return all scores exactly as shown in the report.",
+    "Extract scores from a College Board SAT score report PDF. Return all scores exactly as shown in the report.",
   input_schema: {
     type: "object" as const,
     properties: {

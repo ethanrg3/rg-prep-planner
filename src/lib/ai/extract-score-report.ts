@@ -23,8 +23,8 @@ export interface ExtractedScoreReport {
 }
 
 export async function extractScoreReport(
-  imageBase64: string,
-  mediaType: "image/png" | "image/jpeg" | "image/webp" | "image/gif"
+  pdfBase64: string,
+  mediaType: "application/pdf"
 ): Promise<ExtractedScoreReport> {
   const client = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY!,
@@ -33,7 +33,7 @@ export async function extractScoreReport(
   const response = await client.messages.create({
     model: "claude-sonnet-4-6",
     max_tokens: 2048,
-    system: `You are an OCR specialist for College Board SAT score reports from the Bluebook digital SAT platform. Extract all scores exactly as shown in the report image.
+    system: `You are an OCR specialist for College Board SAT score reports from the Bluebook digital SAT platform. Extract all scores exactly as shown in the report PDF.
 
 The SAT score report format:
 - Total Score: 400-1600 (composite of Reading & Writing + Math)
@@ -52,16 +52,16 @@ Extract the practice test label (e.g., "Practice 6") and date from the report he
         role: "user",
         content: [
           {
-            type: "image",
+            type: "document",
             source: {
               type: "base64",
               media_type: mediaType,
-              data: imageBase64,
+              data: pdfBase64,
             },
           },
           {
             type: "text",
-            text: "Extract all scores from this SAT score report. Count the filled boxes carefully for each Knowledge and Skills domain (1-7 scale). Return the results using the extract_score_report tool.",
+            text: "Extract all scores from this SAT score report PDF. Count the filled boxes carefully for each Knowledge and Skills domain (1-7 scale). Return the results using the extract_score_report tool.",
           },
         ],
       },

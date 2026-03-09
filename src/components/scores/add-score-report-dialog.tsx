@@ -15,7 +15,15 @@ import { ImageUploadArea } from "./image-upload-area";
 import { ScoreVerificationForm } from "./score-verification-form";
 import { saveScoreReportAction } from "@/lib/actions/student-actions";
 import type { ExtractedScoreReport } from "@/lib/ai/extract-score-report";
-import type { ScoreReport } from "@/types/database";
+import type { ReportSource, ScoreReport } from "@/types/database";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type DialogState = "upload" | "extracting" | "verify";
 
@@ -32,11 +40,13 @@ export function AddScoreReportDialog({
   const [state, setState] = useState<DialogState>("upload");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [extractedData, setExtractedData] = useState<ExtractedScoreReport | null>(null);
+  const [reportSource, setReportSource] = useState<ReportSource>("practice");
 
   function resetDialog() {
     setState("upload");
     setSelectedFile(null);
     setExtractedData(null);
+    setReportSource("practice");
   }
 
   async function handleExtract() {
@@ -46,7 +56,7 @@ export function AddScoreReportDialog({
 
     try {
       const formData = new FormData();
-      formData.append("image", selectedFile);
+      formData.append("file", selectedFile);
 
       const res = await fetch("/api/extract-score", {
         method: "POST",
@@ -98,6 +108,7 @@ export function AddScoreReportDialog({
         reportLabel: data.report_label,
         reportDate: data.report_date,
         compositeScore: data.composite_score,
+        reportSource,
         sectionScores,
       });
 
@@ -137,9 +148,24 @@ export function AddScoreReportDialog({
         {state === "upload" && (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Upload a screenshot of the College Board SAT score report. AI will
+              Upload a College Board SAT score report PDF. AI will
               extract the scores automatically.
             </p>
+            <div className="space-y-2">
+              <Label>Report Type</Label>
+              <Select
+                value={reportSource}
+                onValueChange={(value) => setReportSource(value as ReportSource)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select report type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="practice">Practice</SelectItem>
+                  <SelectItem value="official">Official</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             <ImageUploadArea onFileSelect={setSelectedFile} />
             {selectedFile && (
               <div className="flex justify-end">
@@ -147,7 +173,7 @@ export function AddScoreReportDialog({
                   className="bg-orange-500 hover:bg-orange-600"
                   onClick={handleExtract}
                 >
-                  Upload & Extract Scores
+                  Upload PDF & Extract Scores
                 </Button>
               </div>
             )}

@@ -240,6 +240,7 @@ export const intakeFormSchema = z.object({
   testDetails: testDetailsSchema,
   satScores: satScoresSchema.optional(),
   actScores: actScoresSchema.optional(),
+  baselineReportSource: z.enum(["practice", "official"]).default("practice"),
   schedule: scheduleSchema,
   generatePlan: z.boolean().default(true),
 });

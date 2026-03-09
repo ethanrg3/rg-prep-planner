@@ -4,6 +4,7 @@
 export type TestType = "ACT" | "SAT";
 export type StudentStatus = "active" | "inactive" | "completed";
 export type ReportType = "baseline" | "predicted" | "actual";
+export type ReportSource = "practice" | "official";
 export type PlanStatus = "draft" | "approved" | "archived";
 export type SessionStatus = "scheduled" | "completed" | "cancelled";
 export type ResourceType = "khan_academy" | "college_board" | "bluebook_test" | "act_pdf" | "worksheet";
@@ -115,6 +116,7 @@ export interface ScoreReport {
   id: string;
   student_id: string;
   report_type: ReportType;
+  report_source: ReportSource;
   report_label: string;
   report_date: string;
   composite_score: number;

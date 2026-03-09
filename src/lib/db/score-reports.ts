@@ -1,5 +1,10 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import type { ScoreReport, SectionScores, SectionPrediction } from "@/types/database";
+import type {
+  ScoreReport,
+  SectionScores,
+  SectionPrediction,
+  ReportSource,
+} from "@/types/database";
 
 export async function getScoreReports(
   studentId: string
@@ -21,6 +26,7 @@ export async function getScoreReports(
 export interface CreateScoreReportInput {
   studentId: string;
   reportType: "baseline" | "predicted" | "actual";
+  reportSource?: ReportSource;
   reportLabel: string;
   reportDate: string;
   compositeScore: number;
@@ -42,6 +48,7 @@ export async function createScoreReport(
     .insert({
       student_id: data.studentId,
       report_type: data.reportType,
+      report_source: data.reportSource ?? "practice",
       report_label: data.reportLabel,
       report_date: data.reportDate,
       composite_score: data.compositeScore,
@@ -59,12 +66,28 @@ export async function createScoreReport(
   return mapScoreReport(report);
 }
 
+export async function deleteScoreReport(
+  studentId: string,
+  reportId: string
+): Promise<void> {
+  const supabase = createAdminClient();
+
+  const { error } = await supabase
+    .from("score_reports")
+    .delete()
+    .eq("id", reportId)
+    .eq("student_id", studentId);
+
+  if (error) throw error;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapScoreReport(row: any): ScoreReport {
   return {
     id: row.id,
     student_id: row.student_id,
     report_type: row.report_type,
+    report_source: row.report_source ?? "practice",
     report_label: row.report_label,
     report_date: row.report_date,
     composite_score: row.composite_score,

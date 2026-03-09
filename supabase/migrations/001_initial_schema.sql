@@ -68,6 +68,7 @@ CREATE TABLE score_reports (
   prediction_range_high INTEGER,
   section_predictions JSONB,
   confidence_notes TEXT,
+  report_source TEXT NOT NULL DEFAULT 'practice' CHECK (report_source IN ('practice', 'official')),
   source_image_url TEXT,
   created_at TIMESTAMPTZ DEFAULT now()
 );
